@@ -1,6 +1,6 @@
-const compose = (f, g) => x => f(g(x));
+const {compose, curry} = require('ramda');
 
-const add = (x,y) => x + y;
+// const compose = (f, g) => x => f(g(x));
 
 const toUpper = str => str.toUpperCase();
 
@@ -14,7 +14,15 @@ test("Compose exclaim and toUpper", ()=>{
     expect(shout('tears')).toEqual('TEARS!')
 })
 
+const loaderFirst = compose(shout, first)
+
 test("Compose exclaim and toUpper and first", ()=>{
-    const eins = compose(compose(exclaim, toUpper), first)
-    expect(eins('TEARS')).toEqual('T!')
+    expect(loaderFirst('TEARS')).toEqual('T!')
+})
+
+const concat = curry((y, x) => x + y);
+
+test("Should compuse with two params function", ()=>{
+    const quietShout = compose(concat('🔥'), loaderFirst)
+    expect(quietShout('TEARS')).toEqual('T!🔥')
 })
