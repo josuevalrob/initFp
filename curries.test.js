@@ -1,7 +1,9 @@
-const add = (a, b) => a + b;
 
-test("it should plus 1 and 4 and return 5", ()=>{
+const getOdds = (arr) => arr;
+
+
+test("it should get odds from an array list", ()=>{
     expect(
-        add(1,4)
-    ).toBe(5)
+        getOdds([1,2,3,4,5])
+    ).toEqual([2,4])
 })
