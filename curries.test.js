@@ -1,15 +1,14 @@
-const curry = f =>
-    x => y => f(x, y);
+const { curry } = require('ramda');
 
+// const curry = f =>
+//     x => y => f(x, y);
 
-const modulo = curry((m, v) => !!(v % m));
-
-const isOdd = modulo(2);
-
+const modulo = curry((m , bool, v) => (v % m) == bool);
+const moduloTwo = modulo(2)
 const filter = curry((f, arr) => arr.filter(f));
 
+const isOdd = moduloTwo(true);
 const getOdds = filter(isOdd);
-
 
 test("it should get odds from an array list", ()=>{
     expect(
@@ -17,8 +16,7 @@ test("it should get odds from an array list", ()=>{
     ).toEqual([1,3,5])
 })
 
-const isEven = curry((x, y) => !(y % x))(2)
-
+const isEven = moduloTwo(false)
 const getEvens = filter(isEven);
 
 test("it should get even numbers from an array list", ()=>{
