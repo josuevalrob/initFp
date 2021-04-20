@@ -5,11 +5,6 @@ const nextChartFromNumberString = str => {
     const nextNumer = number + 1;
     return String.fromCharCode(nextNumer);
 }
-test("Get chart from number spaced string", ()=> {
-    expect(
-        nextChartFromNumberString(' 64 ')
-    ).toEqual("A");
-});
 
 const result = (str) =>
     [str]
@@ -18,11 +13,6 @@ const result = (str) =>
     .map(x => x + 1)
     .map(x => String.fromCharCode(x))
 
-test("Get chart from number spaced string 2", ()=> {
-    expect(
-        result(' 64 ')
-    ).toEqual(["A"]); //now is an array
-});
 
 //* functor has map method. The ability to put it into the box.
 const Box = x => ({
@@ -37,8 +27,28 @@ const boxChart = str => Box(str)
     .map(number => number + 1)
     .fold(String.fromCharCode) //extract from the box
 
-test("Get chart from number spaced string with box", ()=> {
-    expect(
-        boxChart(' 64 ')
-    ).toEqual("A");
+test("Get chart from number spaced string", ()=> {
+    expect(nextChartFromNumberString(' 64 ')).toEqual("A");
+    expect(boxChart(' 64 ')).toEqual("A");
+    expect(result(' 64 ')[0]).toEqual("A"); //now is an array
 });
+
+//get the half of the first large number
+const first = xs => xs[0];
+const halfTheFirstLargeNumber = xs => {
+    const found = xs.filter(x => x >= 20);
+    const answer = first(found) / 2;
+    return `The answer is ${answer}`;
+}
+
+const halfTheFirstLargeNumberWithBox = xs => Box(xs)
+    .map(xs => xs.filter(x => x >= 20))
+    .map(found => first(found) / 2)
+    .fold(answer =>`The answer is ${answer}`)
+
+test("Get the half of the first large number", ()=> {
+    expect( halfTheFirstLargeNumber([1, 4, 50]) ).toEqual("The answer is 25");
+    expect( halfTheFirstLargeNumberWithBox([1, 4, 50]) ).toEqual("The answer is 25");
+});
+
+
