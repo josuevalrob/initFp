@@ -42,7 +42,7 @@ const halfTheFirstLargeNumber = xs => {
 }
 
 const halfTheFirstLargeNumberWithBox = xs => Box(xs)
-    .map(xs => xs.filter(x => x >= 20))
+    .map(fs => fs.filter(x => x >= 20))
     .map(found => first(found) / 2)
     .fold(answer =>`The answer is ${answer}`)
 
@@ -51,4 +51,4 @@ test("Get the half of the first large number", ()=> {
     expect( halfTheFirstLargeNumberWithBox([1, 4, 50]) ).toEqual("The answer is 25");
 });
 
-
+const compose = (f, g) => x => Box(x).map(g).fold(f)
