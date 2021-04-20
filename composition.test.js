@@ -1,4 +1,4 @@
-const {compose, curry} = require('ramda');
+const {compose, toLower, curry, filter, reverse, map, trim, join, split} = require('ramda');
 
 // const compose = (f, g) => x => f(g(x));
 
@@ -25,4 +25,31 @@ const concat = curry((y, x) => x + y);
 test("Should compuse with two params function", ()=>{
     const quietShout = compose(concat('🔥'), loaderFirst)
     expect(quietShout('TEARS')).toEqual('T!🔥')
+})
+
+const doStuff = str =>
+    str
+    .toLowerCase()
+    .split(' ')
+    .map( c => c.trim() )
+    .reverse()
+    .filter(x => x.length > 3)
+    .join('')
+
+const doCompose = compose(
+    join(''),
+    filter(x => x.length > 3),
+    reverse,
+    map(trim),
+    split(' '),
+    toLower
+)
+
+test("Should doStuffs && doCompose", ()=>{
+    expect(
+        doStuff('Chain Dot Com')
+    ).toEqual('chain')
+    expect(
+        doCompose('Chain Dot Com')
+    ).toEqual('chain')
 })
