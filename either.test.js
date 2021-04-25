@@ -12,12 +12,14 @@ test("Should find no defined color", ()=> {
 
 const Right = x => ({
     map: f => Right(f(x)),
+    chain: f => f(x),
     fold: (l, r) => r(x), //will call the provided function
     toString: `Right(${x})`,
 });
 
 const Left = x => ({
     map: f => Left(x),
+    chain: f => Left(x), //thanks but no... 
     fold: (l, r) => l(x), //will call other function
     toString: `Left(${x})`,
 })
@@ -55,9 +57,12 @@ const tryCatch = f => {
 
 const readFileSync = path => tryCatch(()=> fs.readFileSync(path))
 
+const parseJson = content => tryCatch(()=> JSON.parse(content))
+
 const getPort = (file) =>
     readFileSync(file)
-        .map(content => JSON.parse(content))
+        // .map(content => JSON.parse(content))
+        .chain(parseJson)
         .map(config => config.port)
         .fold(
             ()=> 3000,
