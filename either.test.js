@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 const findColorDummy = name => ({red:'#ff4444', blue:'#3b4998', yellow: '#fff68f'}[name])
 
 test("Should find red color", ()=> {
@@ -28,6 +30,48 @@ const findColor = name => {
 const findColorFromNullable = name => fromNullable({red:'#ff4444', blue:'#3b4998', yellow: '#fff68f'}[name])
 
 const fromNullable = x => x!= null ? Right(x) : Left()
+
+const logger = x => {
+    console.log('💃',x)
+    return x;
+}
+
+const getPort_ = () => {
+    try {
+        const str = fs.readFileSync('config.json');
+        const config = JSON.parse(str)
+    } catch {
+        return 3000;
+    }
+}
+
+const tryCatch = f => {
+    try {
+        return Right(f())
+    } catch (error) {
+        return Left(error)
+    }
+}
+
+const readFileSync = path => tryCatch(()=> fs.readFileSync(path))
+
+const getPort = (file) =>
+    readFileSync(file)
+        .map(content => JSON.parse(content))
+        .map(config => config.port)
+        .fold(
+            ()=> 3000,
+            x => x
+        )
+
+test("get port", ()=>{
+    expect(getPort('config.json')).toEqual(8088);
+    expect(getPort('notReally.json')).toEqual(3000);
+})
+
+module.exports = {
+    Right, Left, fromNullable
+} 
 
 test("Should find red color findColorFromNullable", ()=> {
     expect(
